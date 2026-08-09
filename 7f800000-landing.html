@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7F800000 — Compute Cluster</title>
+<style>
+:root{--bg:#0a0a0f;--surface:#12121a;--accent:#6366f1;--accent2:#8b5cf6;--text:#e2e8f0;--muted:#94a3b8;--border:#1e1e2e;--green:#22c55e;--cyan:#06b6d4;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,0.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-size:1.4rem;font-weight:800;letter-spacing:2px;color:var(--green);font-family:'Courier New',monospace}
+.logo::before{content:'0x';color:var(--muted);font-weight:400;letter-spacing:0}
+.nav-links{display:flex;gap:32px}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;transition:color 0.2s}
+.nav-links a:hover{color:var(--green)}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:80px;position:relative}
+.hero::before{content:'';position:absolute;top:20%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(34,197,94,0.12),transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);padding:8px 20px;border-radius:50px;font-size:0.85rem;color:var(--muted);margin-bottom:32px}
+.hero-badge span{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.hero h1{font-size:clamp(3rem,8vw,6rem);font-weight:800;line-height:1;margin-bottom:24px;letter-spacing:4px;font-family:'Courier New',monospace;color:var(--green);text-shadow:0 0 60px rgba(34,197,94,0.15)}
+.hero p{font-size:clamp(1rem,2vw,1.25rem);color:var(--muted);max-width:600px;margin:0 auto 40px}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--green);color:#000;padding:14px 32px;border-radius:12px;text-decoration:none;font-weight:700;transition:transform 0.2s,box-shadow 0.2s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(34,197,94,0.3)}
+.btn-secondary{background:var(--surface);color:var(--text);padding:14px 32px;border-radius:12px;text-decoration:none;font-weight:600;border:1px solid var(--border);transition:all 0.2s}
+.btn-secondary:hover{border-color:var(--green);color:var(--green)}
+
+/* Sections */
+section{padding:100px 0}
+.section-header{text-align:center;margin-bottom:64px}
+.section-header h2{font-size:2.2rem;font-weight:700;margin-bottom:12px}
+.section-header p{color:var(--muted);font-size:1.1rem;max-width:500px;margin:0 auto}
+
+/* Status Grid */
+.status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+@media(max-width:768px){.status-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center;transition:all 0.3s}
+.stat-card:hover{border-color:rgba(34,197,94,0.3);transform:translateY(-4px)}
+.stat-card .val{font-size:2.5rem;font-weight:800;color:var(--green);margin-bottom:8px;font-family:'Courier New',monospace}
+.stat-card .lab{color:var(--muted);font-size:0.85rem;text-transform:uppercase;letter-spacing:1px}
+
+/* Architecture */
+.arch-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+@media(max-width:768px){.arch-grid{grid-template-columns:1fr}}
+.arch-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px}
+.arch-card h3{font-size:1.1rem;margin-bottom:16px;color:var(--green);display:flex;align-items:center;gap:10px}
+.arch-card p{color:var(--muted);font-size:0.9rem;line-height:1.7;margin-bottom:16px}
+.arch-code{background:#0a0a0f;border:1px solid var(--border);border-radius:12px;padding:20px;font-family:'Courier New',monospace;font-size:0.8rem;color:var(--muted);overflow-x:auto}
+.arch-code .k{color:var(--cyan)}.arch-code .s{color:var(--green)}.arch-code .c{color:#444}
+
+/* API Endpoints */
+.api-list{display:flex;flex-direction:column;gap:12px;max-width:800px;margin:0 auto}
+.api-row{display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 24px;transition:all 0.2s}
+.api-row:hover{border-color:rgba(34,197,94,0.2)}
+.api-method{padding:6px 14px;border-radius:8px;font-size:0.75rem;font-weight:700;background:rgba(34,197,94,0.1);color:var(--green);min-width:60px;text-align:center}
+.api-path{flex:1;font-family:'Courier New',monospace;font-size:0.9rem;color:var(--text)}
+.api-desc{color:var(--muted);font-size:0.85rem}
+
+/* Footer */
+footer{padding:60px 0 40px;text-align:center;border-top:1px solid var(--border)}
+footer .logo{font-size:1.5rem;margin-bottom:16px;display:inline-block;color:var(--green)}
+footer p{color:var(--muted);font-size:0.9rem}
+footer .links{display:flex;gap:24px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+footer .links a{color:var(--muted);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
+footer .links a:hover{color:var(--green)}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <div class="logo">7F800000</div>
+    <div class="nav-links">
+      <a href="#status">Status</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#api">API</a>
+      <a href="https://maya-ai.tech">Maya AI</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge"><span></span> Maya AI Infrastructure · NVIDIA GB10</div>
+    <h1>7F800000</h1>
+    <p>IEEE 754 · Positive Infinity · Distributed Compute Cluster for Ambient AI Inference</p>
+    <div class="hero-btns">
+      <a href="#status" class="btn-primary">Cluster Status</a>
+      <a href="#api" class="btn-secondary">API Docs</a>
+    </div>
+  </div>
+</section>
+
+<section id="status">
+  <div class="container">
+    <div class="section-header">
+      <h2>Cluster Status</h2>
+      <p>Real-time overview of the 7F800000 compute fabric</p>
+    </div>
+    <div class="status-grid">
+      <div class="stat-card">
+        <div class="val">4</div>
+        <div class="lab">Active Nodes</div>
+      </div>
+      <div class="stat-card">
+        <div class="val">∞</div>
+        <div class="lab">Scale Limit</div>
+      </div>
+      <div class="stat-card">
+        <div class="val">99.9%</div>
+        <div class="lab">Uptime SLA</div>
+      </div>
+      <div class="stat-card">
+        <div class="val">&lt;50ms</div>
+        <div class="lab">Inference Latency</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="architecture">
+  <div class="container">
+    <div class="section-header">
+      <h2>Cluster Architecture</h2>
+      <p>Edge-to-cloud inference fabric for the Maya AI WIA engine</p>
+    </div>
+    <div class="arch-grid">
+      <div class="arch-card">
+        <h3>⚡ Hardware Stack</h3>
+        <p>Each node runs on NVIDIA Grace Blackwell GB10 with unified memory architecture. RoCE interconnect enables zero-copy tensor sharing across the cluster.</p>
+        <div class="arch-code">
+<span class="c">// Node Specification</span><br>
+<span class="k">node</span>: {<br>
+&nbsp;&nbsp;<span class="s">cpu</span>: <span class="k">Grace_72_core</span>,<br>
+&nbsp;&nbsp;<span class="s">gpu</span>: <span class="k">Blackwell_1Petaflop</span>,<br>
+&nbsp;&nbsp;<span class="s">memory</span>: <span class="k">128GB_unified</span>,<br>
+&nbsp;&nbsp;<span class="s">interconnect</span>: <span class="k">RoCE_100Gbps</span><br>
+}
+        </div>
+      </div>
+      <div class="arch-card">
+        <h3>🧠 Software Stack</h3>
+        <p>Inference optimized with TensorRT-LLM and NVIDIA NIM. The WIA arbitration engine distributes workload across nodes based on zone affinity and load.</p>
+        <div class="arch-code">
+<span class="c">// Inference Pipeline</span><br>
+<span class="k">pipeline</span>: [<br>
+&nbsp;&nbsp;<span class="s">TensorRT_LLM</span>,<br>
+&nbsp;&nbsp;<span class="s">NIM_Microservices</span>,<br>
+&nbsp;&nbsp;<span class="s">WIA_Arbitration</span>,<br>
+&nbsp;&nbsp;<span class="s">Biometric_Matching</span><br>
+]
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="api">
+  <div class="container">
+    <div class="section-header">
+      <h2>API Endpoints</h2>
+      <p>Public surface for edge nodes and client applications</p>
+    </div>
+    <div class="api-list">
+      <div class="api-row">
+        <div class="api-method">POST</div>
+        <div class="api-path">/api/v1/inference</div>
+        <div class="api-desc">LLM reasoning + WIA arbitration</div>
+      </div>
+      <div class="api-row">
+        <div class="api-method">POST</div>
+        <div class="api-path">/api/v1/biometric</div>
+        <div class="api-desc">Face/voice embedding matching</div>
+      </div>
+      <div class="api-row">
+        <div class="api-method">GET</div>
+        <div class="api-path">/api/v1/health</div>
+        <div class="api-desc">Cluster node status & metrics</div>
+      </div>
+      <div class="api-row">
+        <div class="api-method">WS</div>
+        <div class="api-path">/ws/v1/stream</div>
+        <div class="api-desc">Real-time voice streaming</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo">7F800000</div>
+    <p>Compute Cluster · A Maya AI Service · Wrocław, Poland</p>
+    <div class="links">
+      <a href="https://maya-ai.tech">maya-ai.tech</a>
+      <a href="https://8bitsai.com">8bitsai.com</a>
+      <a href="https://mayabrainstorm.com">mayabrainstorm.com</a>
+    </div>
+    <p style="margin-top:32px;font-size:0.8rem;color:var(--muted)">© 2026 Maya AI. All rights reserved. Patent pending.</p>
+  </div>
+</footer>
+
+</body>
+</html>
