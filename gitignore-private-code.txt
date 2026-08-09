@@ -1,0 +1,67 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Models & weights (large files, never commit)
+*.pt
+*.pth
+*.onnx
+*.tflite
+*.gguf
+*.bin
+models/
+checkpoints/
+weights/
+
+# Data (never commit raw data)
+data/
+datasets/
+*.wav
+*.mp3
+*.mp4
+*.avi
+
+# Secrets & configs
+.env
+.env.local
+.env.production
+secrets.json
+config.local.yaml
+*.pem
+*.key
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+logs/
+*.log
+
+# Docker
+*.env.docker
